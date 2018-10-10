@@ -25,7 +25,23 @@ twice = 'https://open.spotify.com/artist/7n2Ycct7Beij7Dj7meI4X0'
 blackpink = 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF'
 shinee = 'https://open.spotify.com/artist/2hRQKC0gqlZGPrmUKbcchR'
 
-artist_list = [redvelvet, twentyone, ikon, superjunior, gfriend, wannaone, bts, bigbang, gg, exo, twice, blackpink,shinee]
+#American pop
+onedirection = 'https://open.spotify.com/artist/4AK6F7OLvEQ5QYCBNiQWHq'
+kellyclarkson = 'https://open.spotify.com/artist/3BmGtnKgCSGYIUhmivXKWX'
+backstreetboys = 'https://open.spotify.com/artist/5rSXSAkZ67PYJSvpUpkOr7'
+nsync = 'https://open.spotify.com/artist/6Ff53KvcvAj5U7Z1vojB5o'
+ladygaga = 'https://open.spotify.com/artist/1HY2Jd0NmPuamShAr6KMms'
+brunomars = 'https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C'
+theweeknd = 'https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ'
+
+katyperry = 'https://open.spotify.com/artist/6jJ0s89eD6GaHleKKya26X'
+rihanna = 'https://open.spotify.com/artist/5pKCCKE2ajJHZ9KAiaK11H'
+christinaaguilera = 'https://open.spotify.com/artist/1l7ZsJRRS8wlW3WfJfPfNS'
+taylorswift = 'https://open.spotify.com/artist/06HL4z0CvFAxyc27GXpf02'
+
+
+
+artist_list = [katyperry, rihanna, christinaaguilera, taylorswift]
 
 
 feature_list = []
@@ -44,15 +60,20 @@ for artist in artist_list:
         for j in range(len(album_tracks['items'])):
             album_song = album_tracks['items'][j]['uri']
             audiofeatures = sp.audio_features(album_song)
-            
+
+#            #extract individual audio features of individual tracks
+#            for feature in audiofeatures:
+#                feature_list.append([artistalbums['items'][0]['artists'][0]['name'], artistalbums['items'][0]['release_date']])
+
+
             #extract individual audio features of individual tracks
             for feature in audiofeatures:
                 feature_list.append([feature['danceability'], feature['energy'], feature['key'], feature['speechiness'],
                                      feature['acousticness'], feature['instrumentalness'], feature['liveness'], feature['valence'],
-                                     feature['tempo'], feature['duration_ms'],feature['time_signature'], artistalbums['items'][0]['artists'][0]['name']])
+                                     feature['tempo'], feature['duration_ms'],feature['time_signature'], artistalbums['items'][0]['artists'][0]['name'], artistalbums['items'][i]['release_date']])
 
 
-data = pd.DataFrame(feature_list, columns = ['danceability','energy','key','speechiness','acousticness','instrumentalness','liveness','valence','tempo','duration_ms','time_signature', 'artist_name'])
+data = pd.DataFrame(feature_list, columns = ['danceability','energy','key','speechiness','acousticness','instrumentalness','liveness','valence','tempo','duration_ms','time_signature', 'artist_name', 'release_date'])
 
-data.to_csv('extracted_song_features.csv')
+data.to_csv('apop_song_features4.csv')
 
