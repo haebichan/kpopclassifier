@@ -25,6 +25,9 @@ twice = 'https://open.spotify.com/artist/7n2Ycct7Beij7Dj7meI4X0'
 blackpink = 'https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF'
 shinee = 'https://open.spotify.com/artist/2hRQKC0gqlZGPrmUKbcchR'
 
+btob = 'https://open.spotify.com/artist/2hcsKca6hCfFMwwdbFvenJ'
+aoa = 'https://open.spotify.com/artist/54gWVQFHf8IIqbjxAoOarN'
+
 #American pop
 onedirection = 'https://open.spotify.com/artist/4AK6F7OLvEQ5QYCBNiQWHq'
 kellyclarkson = 'https://open.spotify.com/artist/3BmGtnKgCSGYIUhmivXKWX'
