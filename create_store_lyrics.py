@@ -14,7 +14,7 @@ client_credentials_manager = SpotifyClientCredentials(client_id = my_id, client_
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 
-dic = {'redvelvet':'red-velvet', 'twentyone':'2ne1', 'ikon': 'ikon', 'gfriend':'gfriend', 'wannaone':'wanna-one', 'bigbang':'big-bang', 'gg':'girls-generation','exo':'exo','twice':'twice','blackpink':'blackpink','shinee':'shinee', 'btob':'btob', 'aoa':'aoa', 'lovelyz':'lovelyz','seventeen':'seventeen'}
+dic = {'redvelvet':'red-velvet', 'twentyone':'2ne1', 'ikon': 'ikon', 'gfriend':'gfriend', 'wannaone':'wanna-one', 'bigbang':'big-bang', 'gg':'girls-generation','exo':'exo','twice':'twice','blackpink':'blackpink','shinee':'shinee', 'btob':'btob', 'aoa':'aoa', 'lovelyz':'lovelyz','seventeen':'seventeen', 'bts':'BTS'}
 
 
 redvelvet = 'https://open.spotify.com/artist/1z4g3DjTBBZKhvAroFlhOM'
@@ -73,14 +73,39 @@ def create_and_store_lyrics(sp, artist_name = None, artist_dic = None):
             r = requests.get('https://genius.com/Genius-translations-' + dic[artist_dic] + '-' + global_list[i] + '-english-translation-lyrics')
             soup = BeautifulSoup(r.text, 'lxml')
             lyrics = soup.find('div', class_='lyrics').get_text()
-            res.append([global_list[i], lyrics])
+            if [global_list[i], lyrics] not in res:
+                res.append([global_list[i], lyrics])
         except Exception as e:
 
             r = requests.get('https://genius.com/' + dic[artist_dic].title() + '-' + global_list[i] + '-lyrics')
             soup = BeautifulSoup(r.text, 'lxml')
             try:
                 lyrics = soup.find('div', class_='lyrics').get_text()
-                res.append([global_list[i], lyrics])
+                if 'English Translation' not in lyrics:
+                    pass
+                else:
+                    lyrics_split = lyrics.split('English Translation')
+                    
+                    try:
+                        j = ''.join(lyrics_split[-1]).split('Romanized')
+                        if [global_list[i], j[0]] not in res:
+                            res.append([global_list[i], j[0]])
+
+                    except Exception as e:
+                        if [global_list[i], lyrics_split[-1]] not in res:
+                            res.append([global_list[i], lyrics_split[-1]])
+
+                    else:
+                        l = ''.join(s[-1]).split('Original')
+                        if [global_list[i], l[0]] not in res:
+                            res.append([global_list[i], l[0]])
+                                
+                    finally:
+                        m = ''.join(s[-1]).split('Hangul')
+                        if [global_list[i], m[0]] not in res:
+                            res.append([global_list[i], m[0]])
+
+
             except Exception as e:
                     pass
 
@@ -88,53 +113,9 @@ def create_and_store_lyrics(sp, artist_name = None, artist_dic = None):
     df = pd.DataFrame(res).to_csv('lyrics_data/' + dic[artist_dic] + '_translated_lyrics.csv')
 
 
-#
-#def create_and_store_lyrics2(sp, artist_name = None, artist_dic = None):
-#    # this is using kpopviral.com for webscraping
-#
-#    dictionary = enchant.Dict("en_US")
-#
-#    albums = sp.artist_albums(artist_id = artist_name, limit = 50)
-#
-#    songs = []
-#
-#    for i in range(len(albums['items'])):
-#        album_uri = albums['items'][i]['uri']
-#        album_tracks = sp.album_tracks(album_uri)
-#
-#        for j in range(len(album_tracks['items'])):
-#            album_song = album_tracks['items'][j]['name']
-#            songs.append(album_song)
-#
-#    global_list = []
-#
-#    for title in songs:
-#        j = title.split()
-#        local_list = []
-#        for word in j:
-#            if word.isalnum() and dictionary.check(word) == True:
-#                local_list.append(word.lower())
-#
-#                global_list.append('-'.join(local_list))
-#
-#    res = []
-#
-#    for i in range(len(global_list)):
-#        try:
-#            r = requests.get('https://www.kpopviral.com/lyrics/' + dic[artist_dic] + '-' + global_list[i] + '-lyrics-english-romanized-translation.html')
-#            soup = BeautifulSoup(r.text, 'lxml')
-#            lyrics = soup.find('div', id = 'EnglishTranslation-0').get_text(strip = False)
-#            res.append([global_list[i], lyrics])
-#        except Exception as e:
-#            pass
-#
-#
-#
-#    df = pd.DataFrame(res).to_csv('lyrics_data/' + dic[artist_dic] + '_translated_lyrics.csv')
 
 
-
-create_and_store_lyrics(sp, artist_name = bigbang, artist_dic = 'bigbang')
+create_and_store_lyrics(sp, artist_name = exo, artist_dic = 'exo')
 
 
 
